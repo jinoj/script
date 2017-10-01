@@ -1,0 +1,33 @@
+#/bi/bash
+
+#set the variables
+DATABASEHOST="server"
+DATABASEUSER="root"
+DATABASEPASSWORD="."
+DATABASESCHEMA="mysql"
+DATABASEENV="backup"
+LOCALDIR="jino"
+SERVERDEST="onij"
+LOCALSTORE="backup"
+
+#display time to backup
+echo $(date +%H:%M)
+
+#ready to backup process
+echo "Creating the MySQL dump" 
+
+#backup all-databases
+mysqldump --host="$DATABASEHOST"  --user="$DATABASEUSER" --password="$DATABASEPASSWORD" --all-databases  > "$LOCALDIR"/"$(date +%Y%m%d)_bkp_$DATABASESCHEMA.sql"
+
+#backup particular database
+sudo mysqldump  --user="$DATABASEUSER" --password="$DATABASEPASSWORD" --single-transaction "$DATABASESCHEMA"  > "$LOCALDIR"/"$(date +%Y%m%d)_bkp_$DATABASESCHEMA.sql"
+
+
+#backup convert to tar.gz file
+tar -cvzf /"$LOCALDIR"/$(date +%Y%m%d)"_"$DATABASEENV"_"$DATABASESCHEMA".tar.gz" "$LOCALDIR"/*
+
+#backup to remote host {shoud have a key based authentication} 
+scp /"$LOCALDIR"/* "$DATABASEHOST":/"$SERVERDEST"
+
+#move to backup location automatically
+mv /"$LOCALDIR"/*.tar.gz /"$LOCALSTORE"
