@@ -1,0 +1,16 @@
+#/bin/bash
+#mkdir -p /home/ansible/Desktop/$(date)
+dirname=/home/ansible/Desktop/$(date +"%F")
+#dirname=/home/ansible/Desktop/$(date)
+
+if [[ ! -d "$dirname" ]]
+#then
+#    if [ -L "$dirname" ]
+then
+    echo "File doesn't exist. Creating now"
+    mkdir -p  "$dirname"
+    echo "File created"
+    else
+        echo "File exists"
+    fi
+#fi
