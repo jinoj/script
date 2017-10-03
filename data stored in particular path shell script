@@ -16,3 +16,4 @@ then
     fi
 #fi
 mysqldump  --user=$MYSQL_USER -p$MYSQL_PASSWORD --all-databases | gzip > "$dirname/$(hostname).sql"
+scp "$dirname/$(hostname).sql" servername:/"$dirname/$(hostname).sql"
