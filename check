@@ -1,0 +1,28 @@
+test.sh
+=======
+
+#/bin/bash
+dirname=/tmp/$(date +"%F")
+if [ !  -d "$dirname" ]
+then
+    echo "File doesn't exist. Creating now"
+    mkdir -p  "$dirname"
+    echo "File created"
+    else
+        echo "File exists"
+    fi
+
+
+test1.sh
+=========
+
+#/bin/bash
+dirname=/tmp/$(date +"%F")
+MYSQL_USER="root"
+MYSQL_PASSWORD="."
+localpath="/mnt"
+name="data"
+mysqldump  --user=$MYSQL_USER -p$MYSQL_PASSWORD --all-databases | gzip > "$localpath/$(hostname).sql"
+#file create with remote server
+ssh ansible@data < /home/radiant/Desktop/mysql/test/test.sh
+scp "$localpath/$(hostname).sql" "$name:/$dirname/$(hostname).sql"
