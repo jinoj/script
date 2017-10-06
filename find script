@@ -1,0 +1,25 @@
+#/bin/bash
+#last 3 day  changes move to some locations
+#files=$(find / -mtime +3 )
+files=$(find /home/radiant/Desktop -mtime +1 )
+#sudo mkdir -p /var/jino
+for file in $files
+do
+cp --parents --preserve -a $file /var/jino 
+done
+
+
+#/bin/bash
+#last 3 day  changes move to some locations
+#files=$(find / -mtime +3 )
+files=$(find /home/radiant/Desktop -mtime +1 )
+#sudo mkdir -p /var/jino
+for file in $files
+do
+#cp --parents --preserve -a $file /var/jino 
+mv  $file /var/jino 
+done
+
+
+
+
