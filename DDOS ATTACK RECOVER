@@ -1,0 +1,21 @@
+ U should have used
+ ===================
+ kill -STOP PROCESS_ID
+ 
+It is ddos linux Trojan
+===========================
+The trojan has raw file coming from /lib/libudev.so, it will copy and fork again. It will also add cron.hourlyjob named gcc.sh, then it will add initial script in your /etc/rc*.d(Debian, CentOS may be /etc/rc.d/{init,rc{1,2,3,4,5}}.d)
+
+Use root to run the script below to change the folder privileges: chmod 0000 /lib/libudev.so && rm -rf /lib/libudev.so && chattr +i /lib/
+
+Delete all /etc/rc{0,1,2,3,4,5,6,S}.dfiles which were created today, The name looks like S01????????.
+
+Edit your crontab, delete the gcc.sh script in your /etc/cron.hourly, delete the gcc.sh file (/etc/cron.hourly/gcc.sh) then add privileges for your crontab: sed '/gcc.sh/d' /etc/crontab && chmod 0000 /etc/crontab && chattr +i /etc/crontab
+
+Use this command to check the latest file changes: ls -lrt
+
+If you find any suspicious files named S01xxxxxxxx (or K8xxxxxxxx), delete it.
+
+Then you should reboot without network.
+
+Then the trojan should be cleaned and you can modify the folder privileges to the original values(chattr -i /lib /etc/crontab).
