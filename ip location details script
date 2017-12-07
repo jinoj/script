@@ -1,0 +1,11 @@
+#!/bin/bash
+d=`date +%d/%b/%Y`
+sudo grep -E $d /var/log/httpd/access_log | awk '{printf $1  "\n"}' |grep -v '127.0.0.1\|::1' | sort | uniq | sort -nr > /home/aj/Desktop/list
+url="https://www.geoiptool.com/en/?IP="
+for i in `cat /home/aj/Desktop/list`
+do
+lynx -dump $url$i > /home/aj/zz.txt
+cat /home/aj/zz.txt | grep -i 'IP Address\|Country\|Region' | sort | uniq
+rm /home/aj/Desktop/list
+rm /home/aj/zz.txt
+done
