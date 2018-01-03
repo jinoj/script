@@ -1,0 +1,16 @@
+#!/bin/bash
+
+service=replace_me_with_orbadmin
+secservice=replace_me_with_another_service_that needs_to_be_running
+
+if (( $(ps -ef | grep -v grep | grep $secservice | wc -l) > 0 ))
+	then
+		echo "$secservice is running!!!"
+	else
+		if (( $(ps -ef | grep -v grep | grep $service | wc -l) > 0 ))
+				then
+				echo "$service is running!!!"
+					else
+					/etc/init.d/$service start
+		fi
+fi
