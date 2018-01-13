@@ -25,3 +25,14 @@ xtrabackup --prepare --apply-log-only --target-dir=/backup/$STAMP/base  --increm
 
 #Copy backup or Move Backup on Mysql Path
 xtrabackup --copy-back  --target-dir=/backup/$STAMP/base/
+
+
+
+
+======================================================
+STAMP=`date +%Y%m%d%H%M`
+echo "Iniciando backup @ $STAMP"
+mkdir -p /var/backups/$STAMP
+LAST_DIR=`ls /var/backups/inc | sort -n | tail -1`
+xtrabackup --use-memory=1G --backup --target-dir=/var/backups/inc/$STAMP --incremental-basedir=/var/backups/inc/$LAST_DIR --user=root --password=<root-password>
+echo "Fin backup @ $STAMP"
