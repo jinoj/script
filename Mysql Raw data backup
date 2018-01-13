@@ -1,0 +1,27 @@
+#!/bin/bash
+STAMP=`date +%Y%m%d`
+STAMP1=`date +%Y%m%d%H%M`
+BACKUP=/backup
+
+#Create today directory
+mkdir -p /backup/$STAMP
+
+#File check file exists or not
+file="/backup/$STAMP/base"
+if [ -f "$file" ]
+then
+        echo "$file found."
+else
+        echo "$file not found."
+        xtrabackup --username=root --password=. --backup --target-dir=/backup/$STAMP/base
+fi
+
+#Incremental process start
+xtrabackup --username=root --password=. --backup --target-dir=/backup/$STAMP/$STAMP1 --incremental-basedir=/backup/$STAMP/base
+
+#Preparing Backup
+LAST_DIR=`ls /backup/$STAMP | sort -n | tail -1`
+xtrabackup --prepare --apply-log-only --target-dir=/backup/$STAMP/base  --incremental-dir=/backup/$STAMP/$LAST_DIR
+
+#Copy backup or Move Backup on Mysql Path
+xtrabackup --copy-back  --target-dir=/backup/$STAMP/base/
