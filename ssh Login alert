@@ -1,0 +1,22 @@
+~/.bash_profile
+
+IP="$(echo $SSH_CONNECTION | cut -d " " -f 1)"
+HOSTNAME=$(hostname)
+NOW=$(date +"%e %b %Y, %a %r")
+
+echo 'Someone from '$IP' logged into '$HOSTNAME' on '$NOW'.' | mail -s 'SSH Login Notification' YOUR_EMAIL_ADDRESS
+
+
+#!/bin/bash
+d=`date +%Y-%m-%d`  #today date
+td=`date +%Y-%m-%d --date="-1 day ago"` #tomorrow date
+
+zip -r /home/director/Desktop/dailybackup/$d.zip /data/$d 
+mkdir -p /data/$td/{DataHO,MisReports} 
+chmod -R 744 /data/$td 
+#Email Notification
+if [ "$?" = "0" ]; then
+        echo "Backup Process was Successful. A new backup file $d.zip has been created. Mail came from hyderabad Samba_server " | mail -s "Backup Status Successful" linuxadmin@services.com
+else
+         echo "Backup Process Failed. Please contact System Administrator. Mail came from hyderabad Samba_server" | mail -s "Backup Status Failed" linuxadmin@services.com
+        exit 1
