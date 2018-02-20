@@ -1,0 +1,13 @@
+#!/bin/bash
+cd /home/ubuntu/Desktop/1
+CURRENT=$(ls -ltr | tail -n1 | awk '{printf $5}')
+if [ "$CURRENT"  -eq 0 ] ; then
+#    mail -s 'Disk Space Alert' mailid@domainname.com << EOF
+#Empty file file create in Particular location 
+#EOF
+echo file create without data
+
+else
+
+echo file create with data
+fi
