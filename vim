@@ -97,3 +97,9 @@ set nu
 set clipboard=unnamed
 map <C-n> :NERDTreeToggle<CR>
 " set tabstop=2 softtabstop=2
+
+
+http://www.alexeyshmalko.com/2014/youcompleteme-ultimate-autocomplete-plugin-for-vim/
+
+https://github.com/Valloric/YouCompleteMe
+
