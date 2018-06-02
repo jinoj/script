@@ -1,6 +1,12 @@
 https://www.cyberciti.biz/programming/vim-plug-a-beautiful-and-minimalist-vim-plugin-manager-for-unix-and-linux-users/
 https://hobo.house/2016/04/09/trick-out-your-vim-editor/
+cd ~
+wget https://github.com/sadsfae/misc-dotfiles/raw/master/vimfiles.tar
+tar -xvf vimfiles.tar
 
+vim 
+
+:PlugInstall
 
 set nocompatible              " required
 filetype off                  " required
