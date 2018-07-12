@@ -1,0 +1,42 @@
+#!/bin/bash
+# Directory where the ping script is located
+DIR=/root/scripts
+# Hostname or IP of remote host (to send alerts to)
+# Key Share is mandatory
+REMOTEHOST="node3"
+# Name of report file
+PING_REPORT="ping_report.txt"
+# Make sure the current file is empty
+cat /dev/null > $DIR/$PING_REPORT
+#Current date to be used in the ping script
+CURRENT_DATE=$(date +'%Y-%m-%d %H:%M')
+# Node list
+NODES="node1 node2"
+# Outer loop: check each node
+for node in $NODES
+  do
+  LOST_PACKETS=$(ping -c 4 $node | grep -i unreachable | wc -l)
+if [  $LOST_PACKETS -eq 0 ]
+  then
+  echo "working fine"
+else
+  echo "$LOST_PACKETS packets were missed while pinging $node at $CURRENT_DATE" >> $DIR/$PING_REPORT
+  fi
+# Inner loop: check all cluster core components in each node
+for service in corosync pacemaker pcsd drbd
+  do
+  IS_ACTIVE=$(ssh -qn $node systemctl is-active $service)
+if [ "$IS_ACTIVE" == "active" ]
+  then
+  echo "working fine"
+else
+    echo "$service is NOT active on $node. Please check ASAP.">> $DIR/$PING_REPORT
+  fi
+done
+done
+# Mail the report unless it's' empty
+if [ -s "$DIR/$PING_REPORT" ]
+then
+#mail -s "Ping report" root@localhost < $DIR/$PING_REPORT
+cat "$DIR/$PING_REPORT" | mail -s "Cluster Status" linuxadmin@radiantcashservices.com
+fi
