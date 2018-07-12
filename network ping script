@@ -1,0 +1,39 @@
+#!/bin/bash                                                                                                                                                            
+
+# Directory where the ping script is located
+DIR=/root/scripts
+
+# Hostname or IP of remote host (to send alerts to)
+#REMOTEHOST="180.145.24.82"
+
+# Name of report file
+PING_REPORT="ping_report.txt"
+
+# Make sure the current file is empty
+cat /dev/null > $DIR/$PING_REPORT
+
+#Current date to be used in the ping script
+CURRENT_DATE=$(date +'%Y-%m-%d %H:%M')
+
+# Node list
+NODES="192.168.5.208 192.168.5.241"
+#NODES="node1 node2"
+
+# Loop through the list of nodes
+for node in $NODES
+  do
+  LOST_PACKETS=$(ping -c 4 $node | grep -i unreachable | wc -l)
+  if [ $LOST_PACKETS -eq 0 ]
+  then
+        echo "working fine"
+  else
+          echo "$LOST_PACKETS packets were missed while pinging $node at $CURRENT_DATE" >> $DIR/$PING_REPORT
+  fi
+done
+
+# Mail the report unless it's' empty
+if [ -s "$DIR/$PING_REPORT" ]
+        then
+        cat "$DIR/$PING_REPORT" | mail -s "This is the subject" linuxadmin@ces.com
+fi
+
