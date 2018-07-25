@@ -38,5 +38,5 @@ done
 if [ -s "$DIR/$PING_REPORT" ]
 then
 #mail -s "Ping report" root@localhost < $DIR/$PING_REPORT
-cat "$DIR/$PING_REPORT" | mail -s "Cluster Status" linuxadmin@radiantcashservices.com
+cat "$DIR/$PING_REPORT" | mail -s "Cluster Status" liadmin@vices.com
 fi
